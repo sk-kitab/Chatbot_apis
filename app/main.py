@@ -1,11 +1,20 @@
 from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from modules.auth import sign_up_user, login_user, get_user
 from modules.chat import get_user_threads, get_thread_chats, create_thread, save_chat_message
 from modules.llm import stream_openai, stream_gemini
 
 app = FastAPI(title="Supabase LLM Chatbot API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class AuthRequest(BaseModel):
     email: str
